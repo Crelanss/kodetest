@@ -1,25 +1,35 @@
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react'
 import './App.css';
+import Header from "./header/Header";
+import MainContent from "./maincontent/MainContent";
+import {BrowserRouter as Router} from 'react-router-dom'
+import Recipe from "./maincontent/Recipe";
+import {Route, Switch} from 'react-router-dom'
+import State from "./store/DataStore";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+const App = () => {
+    const [init, setInit] = useState(false)
+
+    useEffect(() => State.getData(() => {
+        setInit(true)
+    }))
+
+    if (init) {
+        return (
+            <Router>
+                <div>
+                    <Header/>
+                    <Switch>
+                        <Route path='/' exact component={MainContent}/>
+                        <Route path='/:id' exact component={Recipe}/>
+                    </Switch>
+                </div>
+            </Router>
+        )
+    } else {
+        return (<div/>)
+    }
 }
 
 export default App;
